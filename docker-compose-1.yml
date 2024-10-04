@@ -1,44 +1,44 @@
-version: '3'
-services: 
-  zookeeper: 
-    image: confluentinc/cp-zookeeper:7.4.4 
-    environment: 
-      ZOOKEEPER_CLIENT_PORT: 2181 
-      ZOOKEEPER_TICK_TIME: 2000 
-    ports: 
-      - 2181:2181 
+version: '3.8'  # Specify the Compose file version
 
-  kafka: 
-    image: confluentinc/cp-kafka:7.4.4 
-    depends_on: 
-      - zookeeper 
-    ports: 
-      - 9092:9092 
-    environment: 
-      KAFKA_BROKER_ID: 1 
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181 
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.4
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 2181:2181
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.4
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://13.127.99.104:9092
-      KAFKA_LISTENERS: PLAINTEXT://:9092 
+      KAFKA_LISTENERS: PLAINTEXT://:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT 
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1 
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
-  mysql: 
-    image: mysql:latest 
-    container_name: mysql-container 
-    restart: always 
-    environment: 
-      MYSQL_USER: test 
-      MYSQL_ROOT_USER: root 
-      MYSQL_PASSWORD: 'password' 
-      MYSQL_ROOT_PASSWORD: 'password' 
-    ports: 
-      - '3306:3306' 
-    expose: 
-      - '3306' 
-    volumes: 
-      - mysql-db:/var/lib/mysql 
+  mysql:
+    image: mysql # Changed to a stable version
+    container_name: mysql-container  # Changed to a more generic name
+    restart: always
+    environment:
+      MYSQL_USER: test
+      MYSQL_ROOT_USER: root
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '3306:3306'  # Expose MySQL port
+    volumes:
+      - mysql-db:/var/lib/mysql  # Persist data in a named volume
 
-volumes: 
-  mysql-db: 
-    driver: local
+volumes:
+  mysql-db:
+    driver: local  # Use the local driver for volume storage
+
